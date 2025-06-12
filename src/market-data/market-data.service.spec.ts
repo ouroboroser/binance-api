@@ -3,9 +3,10 @@ import { BinanceService } from '../providers/binance/binance.service';
 import { mock } from 'jest-mock-extended';
 import { Model } from 'mongoose';
 import { Trade } from '../database/schemas/trade.schema';
+import {TradeInterface } from '../providers/binance/types/trade.interface';
 
 describe('MarketDataService', () => {
-  const binanceService = mock<BinanceService>();
+  const binanceService: BinanceService = mock<BinanceService>();
   const modelTrade = mock<Model<Trade>>();
 
   let marketDataService: MarketDataService;
@@ -20,7 +21,59 @@ describe('MarketDataService', () => {
 
   it('should be defined', () => {
     expect(marketDataService).toBeDefined();
-  })
+  });
 
-  it('should get trades from binance and return in formatted way')
+  it('should get trades from binance and return in formatted way', async () => {
+    // given
+    const trades: TradeInterface[] = [
+      {
+        id: 195694895,
+        price: '107230.44000000',
+        qty: '0.05236000',
+        quoteQty: '5614.58583840',
+        time: 1749732692290,
+        isBuyerMaker: true,
+        isBestMatch: true,
+      },
+      {
+        id: 195694896,
+        price: '107230.45000000',
+        qty: '0.00004000',
+        quoteQty: '4.28921800',
+        time: 1749732692410,
+        isBuyerMaker: false,
+        isBestMatch: true,
+      },
+    ];
+
+    binanceService.getHistoricalTrades = jest.fn().mockResolvedValue(trades);
+
+    // when
+    const res = await marketDataService.getMarketData({ symbol: 'BTCUSDC' });
+
+    // then
+    expect(res).toHaveLength(2);
+    expect(res).toEqual(
+      expect.arrayContaining([
+        {
+          id: 195694895,
+          price: '107230.44000000',
+          qty: '0.05236000',
+          quoteQty: '5614.58583840',
+          time: new Date(1749732692290).toISOString(),
+          isBuyerMaker: true,
+          isBestMatch: true,
+        },
+        {
+          id: 195694896,
+          price: '107230.45000000',
+          qty: '0.00004000',
+          quoteQty: '4.28921800',
+          time: new Date(1749732692410).toISOString(),
+          isBuyerMaker: false,
+          isBestMatch: true,
+        },
+      ]),
+    );
+  });
 });

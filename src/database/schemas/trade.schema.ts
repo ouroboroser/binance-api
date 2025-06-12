@@ -22,6 +22,9 @@ export class Trade {
 
   @Prop()
   isBestMatch: boolean;
+
+  @Prop()
+  priceForOne: string;
 }
 
 export const TradeSchema = SchemaFactory.createForClass(Trade);

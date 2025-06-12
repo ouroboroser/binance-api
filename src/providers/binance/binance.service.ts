@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { Trade } from '../../database/schemas/trade.schema';
+import { TradeInterface } from './types/trade.interface';
 @Injectable()
 export class BinanceService {
   constructor(private readonly httpService: HttpService) {}
@@ -9,7 +9,7 @@ export class BinanceService {
     symbol: string,
     limit?: number,
     fromId?: number,
-  ): Promise<Trade[]> {
+  ): Promise<TradeInterface[]> {
     const trades = await this.httpService.axiosRef.get(
       `/api/v3/historicalTrades`,
       {

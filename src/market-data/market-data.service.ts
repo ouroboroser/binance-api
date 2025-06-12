@@ -28,6 +28,7 @@ export class MarketDataService {
         time: new Date(trade.time).toISOString(),
         isBuyerMaker: trade.isBuyerMaker,
         isBestMatch: trade.isBestMatch,
+        priceForOne: (trade.quoteQty / trade.qty).toFixed(2),
       };
     });
 
