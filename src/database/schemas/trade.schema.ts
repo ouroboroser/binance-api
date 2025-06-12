@@ -15,7 +15,7 @@ export class Trade {
   quoteQty: string;
 
   @Prop()
-  time: number;
+  time: string;
 
   @Prop()
   isBuyerMaker: boolean;

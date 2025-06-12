@@ -19,18 +19,20 @@ export class MarketDataService {
       data.fromId,
     );
 
-    const formattedTrades =  trades.map((trade) => {
-      const t = {
+    const formattedTrades = trades.map((trade) => {
+      return {
         id: trade.id,
         price: trade.price,
         qty: trade.qty,
-        quoteQty: '5614.58583840',
-        time: 1749732692290,
-        isBuyerMaker: true,
-        isBestMatch: true,
+        quoteQty: trade.quoteQty,
+        time: new Date(trade.time).toISOString(),
+        isBuyerMaker: trade.isBuyerMaker,
+        isBestMatch: trade.isBestMatch,
       };
-    })
+    });
 
-    //await this.tradeModel.insertMany(trades, { ordered: false });
+    await this.tradeModel.insertMany(trades, { ordered: false });
+
+    return formattedTrades;
   }
 }
