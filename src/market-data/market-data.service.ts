@@ -18,11 +18,19 @@ export class MarketDataService {
       data.limit,
       data.fromId,
     );
- 
-    const formattedTrades = trades.map((trade, index) => {
-      const prevPrice = Number(trades[index - 1]?.price) || 0;
 
-      console.log('t = ', prevPrice);
+    const formattedTrades = trades.map((trade, index) => {
+      // main idea o
+      const prevTrade = trades[index - 1];
+
+      const prevPrice = Number(trades[index - 1]?.price) || 0;
+      const prevPriceForOne = (
+        Number(prevTrade?.quoteQty ?? 0) / Number(prevTrade?.qty ?? 0)
+      ).toFixed(2);
+
+      const priceForOne = (Number(trade.quoteQty) / Number(trade.qty)).toFixed(
+        2,
+      );
 
       return {
         id: trade.id,
@@ -32,8 +40,8 @@ export class MarketDataService {
         time: new Date(trade.time).toISOString(),
         isBuyerMaker: trade.isBuyerMaker,
         isBestMatch: trade.isBestMatch,
-        priceForOne: (Number(trade.quoteQty) / Number(trade.qty)).toFixed(2),
-        priceChanged: Number(trade.price) === prevPrice,
+        priceForOne,
+        priceChanged: priceForOne === prevPriceForOne,
         priceDiff: Number(trade.price) - prevPrice,
       };
     });

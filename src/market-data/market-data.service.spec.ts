@@ -76,4 +76,66 @@ describe('MarketDataService', () => {
       ]),
     );
   });
+
+  it('should analyze price correcntly', async () => {
+    // given
+    const trades: TradeInterface[] = [
+      {
+        id: 195694895,
+        price: '107230.44000000',
+        qty: '5',
+        quoteQty: '10',
+        time: 1749732692290,
+        isBuyerMaker: true,
+        isBestMatch: true,
+      },
+      {
+        id: 195694896,
+        price: '107230.45000000',
+        qty: '3',
+        quoteQty: '10',
+        time: 1749732692410,
+        isBuyerMaker: false,
+        isBestMatch: true,
+      },
+    ];
+
+    binanceService.getHistoricalTrades = jest.fn().mockResolvedValue(trades);
+
+    // when
+    const res = await marketDataService.getMarketData({ symbol: 'BTCUSDC' });
+
+    console.log('res', res);
+
+    // then
+    expect(res).toHaveLength(2);
+    expect(res).toEqual(
+      expect.arrayContaining([
+        {
+          id: 195694895,
+          price: '107230.44000000',
+          qty: '5',
+          quoteQty: '10',
+          time: '2025-06-12T12:51:32.290Z',
+          isBuyerMaker: true,
+          isBestMatch: true,
+          priceForOne: '2.00',
+          priceChanged: false,
+          priceDiff: 107230.44,
+        },
+        {
+          id: 195694896,
+          price: '107230.45000000',
+          qty: '3',
+          quoteQty: '10',
+          time: '2025-06-12T12:51:32.410Z',
+          isBuyerMaker: false,
+          isBestMatch: true,
+          priceForOne: '3.33',
+          priceChanged: false,
+          priceDiff: 0.00999999999476131,
+        },
+      ]),
+    );
+  })
 });
