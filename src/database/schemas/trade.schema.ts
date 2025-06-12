@@ -1,14 +1,27 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema()
 export class Trade {
-    @Prop()
-    id: number;
+  @Prop()
+  id: number;
+
+  @Prop()
+  price: string;
+
+  @Prop()
+  qty: string;
+
+  @Prop()
+  quoteQty: string;
+
+  @Prop()
+  time: number;
+
+  @Prop()
+  isBuyerMaker: boolean;
+
+  @Prop()
+  isBestMatch: boolean;
 }
 
-// "price": "107041.99000000",
-//         "qty": "0.02542000",
-//         "quoteQty": "2721.00738580",
-//         "time": 1749731073369,
-//         "isBuyerMaker": true,
-//         "isBestMatch": true
+export const TradeSchema = SchemaFactory.createForClass(Trade);
