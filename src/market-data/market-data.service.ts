@@ -2,5 +2,6 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class MarketDataService {
-  async getMarketData() {}
+  constructor (private readonly )
+  async getMarketData(symbol: string) {}
 }
