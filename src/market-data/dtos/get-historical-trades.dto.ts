@@ -11,4 +11,9 @@ export class GetHistoricalTrades {
   @IsOptional()
   @Type(() => Number)
   limit?: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @Type(() => Number)
+  fromId?: number;
 }

@@ -8,6 +8,6 @@ export class MarketDataController {
 
   @Get('/trades/historical')
   async getHistoricalTrades(@Body() body: GetHistoricalTrades) {
-    const res = await this.marketDataService.getMarketData(body.symbol);
+    const res = await this.marketDataService.getMarketData(body);
   }
 }
