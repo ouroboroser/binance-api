@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BinanceService } from '../providers/binance/binance.service';
 import { GetHistoricalTrades } from './dtos/get-historical-trades.dto';
-import { Trade, TradeSchema } from '../database/schemas/trade.schema';
+import { Trade } from '../database/schemas/trade.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -18,8 +18,12 @@ export class MarketDataService {
       data.limit,
       data.fromId,
     );
+ 
+    const formattedTrades = trades.map((trade, index) => {
+      const prevPrice = Number(trades[index - 1]?.price) || 0;
 
-    const formattedTrades = trades.map((trade) => {
+      console.log('t = ', prevPrice);
+
       return {
         id: trade.id,
         price: trade.price,
@@ -28,7 +32,9 @@ export class MarketDataService {
         time: new Date(trade.time).toISOString(),
         isBuyerMaker: trade.isBuyerMaker,
         isBestMatch: trade.isBestMatch,
-        priceForOne: (trade.quoteQty / trade.qty).toFixed(2),
+        priceForOne: (Number(trade.quoteQty) / Number(trade.qty)).toFixed(2),
+        priceChanged: Number(trade.price) === prevPrice,
+        priceDiff: Number(trade.price) - prevPrice,
       };
     });
 
