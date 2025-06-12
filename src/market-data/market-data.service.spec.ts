@@ -3,7 +3,7 @@ import { BinanceService } from '../providers/binance/binance.service';
 import { mock } from 'jest-mock-extended';
 import { Model } from 'mongoose';
 import { Trade } from '../database/schemas/trade.schema';
-import {TradeInterface } from '../providers/binance/types/trade.interface';
+import { TradeInterface } from '../providers/binance/types/trade.interface';
 
 describe('MarketDataService', () => {
   const binanceService: BinanceService = mock<BinanceService>();
@@ -63,6 +63,7 @@ describe('MarketDataService', () => {
           time: new Date(1749732692290).toISOString(),
           isBuyerMaker: true,
           isBestMatch: true,
+          priceForOne: '107230.44',
         },
         {
           id: 195694896,
@@ -72,6 +73,7 @@ describe('MarketDataService', () => {
           time: new Date(1749732692410).toISOString(),
           isBuyerMaker: false,
           isBestMatch: true,
+          priceForOne: '107230.45',
         },
       ]),
     );
@@ -105,8 +107,6 @@ describe('MarketDataService', () => {
     // when
     const res = await marketDataService.getMarketData({ symbol: 'BTCUSDC' });
 
-    console.log('res', res);
-
     // then
     expect(res).toHaveLength(2);
     expect(res).toEqual(
@@ -120,8 +120,6 @@ describe('MarketDataService', () => {
           isBuyerMaker: true,
           isBestMatch: true,
           priceForOne: '2.00',
-          priceChanged: false,
-          priceDiff: 107230.44,
         },
         {
           id: 195694896,
@@ -132,10 +130,8 @@ describe('MarketDataService', () => {
           isBuyerMaker: false,
           isBestMatch: true,
           priceForOne: '3.33',
-          priceChanged: false,
-          priceDiff: 0.00999999999476131,
         },
       ]),
     );
-  })
+  });
 });

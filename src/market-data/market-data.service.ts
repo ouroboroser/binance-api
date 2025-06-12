@@ -19,15 +19,8 @@ export class MarketDataService {
       data.fromId,
     );
 
-    const formattedTrades = trades.map((trade, index) => {
-      // main idea o
-      const prevTrade = trades[index - 1];
-
-      const prevPrice = Number(trades[index - 1]?.price) || 0;
-      const prevPriceForOne = (
-        Number(prevTrade?.quoteQty ?? 0) / Number(prevTrade?.qty ?? 0)
-      ).toFixed(2);
-
+    const formattedTrades = trades.map((trade) => {
+      // main idea was to compare prev price with current, was not able to finish due to time
       const priceForOne = (Number(trade.quoteQty) / Number(trade.qty)).toFixed(
         2,
       );
@@ -41,8 +34,6 @@ export class MarketDataService {
         isBuyerMaker: trade.isBuyerMaker,
         isBestMatch: trade.isBestMatch,
         priceForOne,
-        priceChanged: priceForOne === prevPriceForOne,
-        priceDiff: Number(trade.price) - prevPrice,
       };
     });
 

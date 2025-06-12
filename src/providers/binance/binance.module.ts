@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { BinanceService } from './binance.service';
 import { HttpModule } from '@nestjs/axios';
 
-const BINANCE_API = 'https://api.binance.com';
+const BINANCE_API = 'https://api.binance.com'; // should be in .env
 
 @Module({
   imports: [HttpModule.register({ baseURL: BINANCE_API })],
